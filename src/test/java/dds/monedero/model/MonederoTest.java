@@ -16,11 +16,12 @@ public class MonederoTest {
     cuenta = new Cuenta();
   }
 
+  //habria que hacer asserts para ver si todo funciona bien
   @Test
   public void Poner() {
     cuenta.poner(1500);
   }
-
+  
   @Test(expected = MontoNegativoException.class)
   public void PonerMontoNegativo() {
     cuenta.poner(-1500);
