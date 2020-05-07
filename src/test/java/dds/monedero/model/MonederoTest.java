@@ -1,5 +1,7 @@
 package dds.monedero.model;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +15,7 @@ public class MonederoTest {
 
   @Before
   public void init() {
+	  // le agrego atr
     cuenta = new Cuenta();
   }
 
