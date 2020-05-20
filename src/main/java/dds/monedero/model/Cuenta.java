@@ -30,9 +30,10 @@ public class Cuenta {
 		}
 		if (this.cantDepositos() >= 3) {
 			throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+		} else {
+			this.agregarMovimiento(LocalDate.now(), cuanto, true);
+			this.saldo = saldo + cuanto;
 		}
-
-		new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
 	}
 
 	public long cantDepositos() {
@@ -48,17 +49,21 @@ public class Cuenta {
 		}
 
 		if (cuanto > this.limite()) {
-			throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000 + " diarios, limite: " + this.limite());
+			throw new MaximoExtraccionDiarioException(
+					"No puede extraer mas de $ " + 1000 + " diarios, limite: " + this.limite());
 		}
-		
-		new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+
+		else {
+			this.agregarMovimiento(LocalDate.now(), cuanto, false);
+			this.saldo = saldo - cuanto;
+		}
 	}
 
 	public double limite() {
 		double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
 		return 1000 - montoExtraidoHoy;
 	}
-	
+
 	public boolean faltaDeSaldo(double cuanto) {
 		return this.saldo - cuanto < 0;
 	}
