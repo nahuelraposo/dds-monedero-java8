@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Movimiento {
 	private LocalDate fecha;
-	// En ningun lenguaje de programacion usen jamas doubles para modelar dinero en el mundo real 
+	// En ningun lenguaje de programacion usen jamas doubles para modelar dinero en el mundo real
 	// siempre usen numeros de precision arbitraria, como BigDecimal en Java y similares
 	private double monto;
 	private boolean esDeposito;
@@ -21,14 +21,6 @@ public class Movimiento {
 
 	public LocalDate getFecha() {
 		return fecha;
-	}
-
-	public boolean fueDepositado(LocalDate fecha) {
-		return isDeposito() && esDeLaFecha(fecha);
-	}
-
-	public boolean fueExtraido(LocalDate fecha) {
-		return !isDeposito() && esDeLaFecha(fecha);
 	}
 
 	public boolean esDeLaFecha(LocalDate fecha) {
