@@ -14,7 +14,6 @@ public class Cuenta {
 	private double saldo = 0;
 	private List<Movimiento> movimientos = new ArrayList<>();
 
-// corrijo lo que puse antes, uso este método para inicializar con saldo 0 y sin movimientos la cuenta
 	public Cuenta() {
 		saldo = 0;
 	}
@@ -74,9 +73,7 @@ public class Cuenta {
 	}
 
 	public double getMontoExtraidoA(LocalDate fecha) {
-		return getMovimientos().stream()
-				.filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
-				.mapToDouble(Movimiento::getMonto).sum();
+		return getMovimientos().stream().filter(movimiento -> movimiento.fueExtraido(fecha)).mapToDouble(Movimiento::getMonto).sum();
 	}
 
 	public List<Movimiento> getMovimientos() {

@@ -2,6 +2,7 @@ package dds.monedero.model;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.Assert;
@@ -21,20 +22,21 @@ public class MonederoTest {
 		cuenta = new Cuenta();
 	}
 
-	// agregado el assert
 	@Test
 	public void Poner() {
 		cuenta.poner(1500);
 
 		Assert.assertEquals(cuenta.getSaldo(), 1500, 0.0);
 	}
-
-	@Test(expected = MontoNegativoException.class)
-	public void PonerMontoNegativo() {
-		cuenta.poner(-1500);
+	
+	@Test 
+	public void sacoLaMitadDeLoQuePongo() {
+		cuenta.poner(1000);
+		cuenta.sacar(500);
+		
+		Assert.assertEquals(cuenta.getSaldo(), 500,0.0);
 	}
 
-	// agregado el assert
 	@Test
 	public void TresDepositos() {
 		cuenta.poner(1500);
@@ -42,6 +44,14 @@ public class MonederoTest {
 		cuenta.poner(1900);
 
 		Assert.assertEquals(cuenta.getSaldo(), 3856, 0.0);
+	}
+	
+	@Test
+	public void obtengoMontoExtraidoDeAhora() {
+		cuenta.poner(1000);
+		cuenta.agregarMovimiento(LocalDate.now(), 100, false);
+		
+		Assert.assertEquals(cuenta.getMontoExtraidoA(LocalDate.now()), 100, 0.0);
 	}
 
 	@Test(expected = MaximaCantidadDepositosException.class)
@@ -62,6 +72,11 @@ public class MonederoTest {
 	public void ExtraerMasDe1000() {
 		cuenta.setSaldo(5000);
 		cuenta.sacar(1001);
+	}
+	
+	@Test(expected = MontoNegativoException.class)
+	public void PonerMontoNegativo() {
+		cuenta.poner(-1500);
 	}
 
 	@Test(expected = MontoNegativoException.class)
