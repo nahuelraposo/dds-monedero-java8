@@ -19,12 +19,12 @@ public class Movimiento {
 		return monto;
 	}
 
-	public LocalDate getFecha() {
+	private LocalDate getFecha() {
 		return fecha;
 	}
 
 	public boolean esDeLaFecha(LocalDate fecha) {
-		return this.fecha.equals(fecha);
+		return this.getFecha().equals(fecha);
 	}
 
 	public boolean isDeposito() {

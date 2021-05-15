@@ -44,8 +44,9 @@ public class MonederoTest {
 
 	@Test
 	public void obtengoMontoExtraidoDeAhora() {
+
 		cuenta.poner(1000);
-		cuenta.agregarMovimiento(LocalDate.now(), 100, false);
+		cuenta.agregarMovimiento(new Movimiento(LocalDate.now(), 100, false));
 
 		Assert.assertEquals(cuenta.getMontoExtraidoA(LocalDate.now()), 100, 0.0);
 	}

@@ -26,23 +26,20 @@ public class Cuenta {
 	public void poner(double cuanto) {
 		validarMontoPositivo(cuanto);
 		validarLimiteDepositos();
-		this.agregarMovimiento(LocalDate.now(), cuanto, true);
+		this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, true));
 		this.saldo = saldo + cuanto;
-
 	}
 
 	public void sacar(double cuanto) {
 		validarMontoPositivo(cuanto);
 		validarSaldoRestante(cuanto);
 		validarLimiteDeExtraccionDiaria(cuanto);
-
-		this.agregarMovimiento(LocalDate.now(), cuanto, false);
+		this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
 		this.saldo = saldo - cuanto;
-
 	}
 
 	private void validarLimiteDepositos() {
-		if (this.cantDepositos() >= 3) {
+		if (this.getCantDepositos() >= 3) {
 			throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
 		}
 	}
@@ -61,32 +58,31 @@ public class Cuenta {
 	}
 
 	private void validarSaldoRestante(double cuanto) {
-		if (faltaDeSaldo(cuanto)) {
+		if (saldoInsuficiente(cuanto)) {
 			throw new SaldoMenorException("No puede sacar mas de " + this.saldo + " $");
 		}
 	}
 
-	public double limite() {
-		double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-		double limite = 1000 - montoExtraidoHoy;
-		return limite;
+	private double limite() {
+		return 1000 - getMontoExtraidoA(LocalDate.now());
 	}
 
-	public boolean faltaDeSaldo(double cuanto) {
+	private boolean saldoInsuficiente(double cuanto) {
 		return this.saldo - cuanto < 0;
 	}
 
-	public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-		Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+	public void agregarMovimiento(Movimiento movimiento) {
 		movimientos.add(movimiento);
 	}
 
 	public double getMontoExtraidoA(LocalDate fecha) {
-		return getMovimientos().stream().filter(movimiento -> movimiento.esDeLaFecha(fecha) && !movimiento.isDeposito())
-				.mapToDouble(Movimiento::getMonto).sum();
+		return getMovimientos().stream()
+				.filter(movimiento -> movimiento.esDeLaFecha(fecha) && !movimiento.isDeposito())
+				.mapToDouble(Movimiento::getMonto)
+				.sum();
 	}
 
-	public List<Movimiento> getMovimientos() {
+	private List<Movimiento> getMovimientos() {
 		return movimientos;
 	}
 
@@ -94,11 +90,9 @@ public class Cuenta {
 		return saldo;
 	}
 
-	public void setSaldo(double saldo) {
-		this.saldo = saldo;
-	}
+	public void setSaldo(double saldo) { this.saldo = saldo; }
 
-	public long cantDepositos() {
+	private long getCantDepositos() {
 		return getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count();
 	}
 
